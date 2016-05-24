@@ -1,0 +1,10 @@
+{
+    "name" : "IBM Forums (Asgaros)",
+    "slug" : "ibm-forum",
+    "download_url" : "http://www-01.ibm.com/software/commerce/plugins/ibm-forum/ibm-forum.zip",
+    "version" : "1.1",
+    "author" : "Ryan Sebade",
+    "sections" : {
+        "description" : "Plugin description here. Basic HTML allowed."
+    }
+}
