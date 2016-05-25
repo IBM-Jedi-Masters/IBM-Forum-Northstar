@@ -1,9 +1,10 @@
 === Asgaros Forum ===
 Contributors: Asgaros
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4A5464D83ACMJ
 Tags: forums, discussion
-Requires at least: 4.3.1
-Tested up to: 4.4.2
-Stable tag: 1.0.9
+Requires at least: 4.3
+Tested up to: 4.5
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,45 +13,67 @@ Asgaros Forum is a lightweight and simple forum plugin for WordPress.
 == Description ==
 Asgaros Forum is the perfect WordPress plugin for you if you want to extend your website with a lightweight discussion board. It is easy to set up and manage, integrates perfectly with WordPress and comes with a small amount of features which makes it fast and simple.
 
+= Installation =
+Create a new page for your forum to display on and add the shortcode [forum] to this page. Add this page to your menu so you can access the forum. Thats all!
+
 = Features =
-* Topic/post management (Remove/Edit/Close/Sticky/Move)
+* Topic & post management
+* Sub-forums
+* Notifications
 * Moderators
 * Permissions
+* Banning
 * Powerful editor
 * File uploads
 * Recent Forum Posts Widget
 * Easy color customization
+* Theme manager
 * Mobile device compatibility
 * Supports multiple languages
 
-= Translations =
-* Bosnian
-* Danish
-* English
-* Finnish
-* French
-* German
-* Hungarian
-* Italian
-* Russian
-* Spanish
-
 == Installation ==
 * Download Asgaros Forum.
-* Create a new page for your forum to display on and add the shortcode [forum] at this page. Save your page.
 * Upload the plugin files to the `/wp-content/plugins/asgaros-forum` directory, or install the plugin through the WordPress plugins screen directly.
 * Activate the plugin through the 'Plugins' screen in WordPress.
 * On the left side you will see a new admin menu called Forum.
 * Configure your Asgaros Forum options, create your Categories and Forums.
+* Create a new page for your forum to display on and add the shortcode [forum] to this page. Save your page.
+* Add this page to your menu so you can access the forum.
 * Done!
 
 == Frequently Asked Questions ==
+= I cant see new posts/threads or modifications I made to the forum =
+If you are using some third-party plugin for caching (WP Super Cache for example) and disable caching for the forum-page, everything should work fine again.
+= I cant upload my files =
+By default only files of the following filetype can be uploaded: jpg, jpeg, gif, png, bmp, pdf. You can modify the allowed filetypes inside the forum administration.
 = Where can I add moderators? =
 Moderators can be added via the user edit screen in the WordPress administration interface.
+= Where can I ban users? =
+Users can be banned via the user edit screen in the WordPress administration interface.
 = I want help to translate Asgaros Forum =
 You can help to translate Asgaros Forum on this site:
 [https://translate.wordpress.org/projects/wp-plugins/asgaros-forum](https://translate.wordpress.org/projects/wp-plugins/asgaros-forum).
-Please contact me in the forums if you want to be a Project Translation Editor (PTE) for a language.
+Please only use this site and dont send me your own .po/.mo files because it is hard to maintain if I get multiple translation-files for a language.
+= Please approve my translations =
+You can approve translations by yourself if you are a Project Translation Editor (PTE). Please contact me in the forums if you are a native speaker and want to become a PTE.
+= How can I add my own theme? =
+You can add own themes for your forum in the `/wp-content/themes-asgarosforum` directory (for example: `/wp-content/themes-asgarosforum/my-theme`). All themes in the `/wp-content/themes-asgarosforum` can be activated in the forum options. Each theme must have at least those files: `style.css`, `mobile.css` and `widgets.css`.
+= Which hooks are available =
+* asgarosforum_after_post_author
+* asgarosforum_after_thread_submit
+* asgarosforum_after_post_submit
+* asgarosforum_after_edit_submit
+* asgarosforum_action_add_category_form_fields
+* asgarosforum_action_edit_category_form_fields
+* asgarosforum_action_save_category_form_fields
+= Which filters are available =
+* asgarosforum_filter_post_username
+* asgarosforum_filter_post_content
+* asgarosforum_filter_editor_settings
+* asgarosforum_filter_get_posts
+* asgarosforum_filter_get_threads
+* asgarosforum_filter_get_posts_order
+* asgarosforum_filter_get_threads_order
 
 == Screenshots ==
 1. The forum overview.
@@ -61,6 +84,76 @@ Please contact me in the forums if you want to be a Project Translation Editor (
 6. Manage general options.
 
 == Changelog ==
+* Fixed: The notification-text in mails is now translatable
+* Added: asgarosforum_filter_get_posts filter
+* Added: asgarosforum_filter_get_posts_order filter
+= 1.1.4 =
+* Fixed: The names of some users were not shown correctly
+= 1.1.3 =
+* Fixed: Correct sanitizing of URL parameters
+* Fixed: Removed unnecessary hyphen from username
+* Added: Option to disable the minimal-configuration of the editor
+= 1.1.2 =
+* Fixed: PHP parse-error when using a PHP version less than 5.3
+* Fixed: Display issues with some themes
+* Added: Notifications functionality
+* Performance improvements and code optimizations
+= 1.1.1 =
+* Fixed: PHP-Warning in theme-manager
+= 1.1.0 =
+* Fixed: Categories were not sorted correctly
+* Fixed: Display issues with some themes
+* Fixed: Prevent accessing some PHP-files directly
+* Added: Sub-forum functionality
+* Added: Banning functionality
+* Added: Theme manager functionality (thanks to Hisol)
+* Added: Color picker for the text
+* Added: Color picker for the background
+* Added: Missing translation strings
+* Changed: Administrators cant be set to forum-moderators anymore
+* Changed: Subject in last-post-view links to the topic
+* Changed: Revised forum management
+* Changed: Minor design changes
+* Changed: Provide translation files via WordPress Updater only
+* Performance improvements and code optimizations
+= 1.0.14 =
+* Fixed: Display issues with some themes
+* Added: Option to modify allowed filetypes for uploads
+* Changed: Only the following filetypes can be uploaded by default: jpg, jpeg, gif, png, bmp, pdf
+* Changed: Hide page-navigation when there is only one page
+* Changed: Provide spanish translation updates via WordPress Updater
+* Performance improvements and code optimizations
+= 1.0.13 =
+* Fixed: Closed forums were not saved correctly
+* Fixed: Display issues with some themes
+* Added: asgarosforum_filter_post_username filter
+* Changed: Show moderator buttons only at the beginning of threads
+* Changed: Minor design changes
+* Performance improvements and code optimizations
+= 1.0.12 =
+* Fixed: Broken link of uploaded file when filename contains umlaute
+* Fixed: Display issues with some themes
+* Added: Option to close forums
+* Changed: Categories are now ordered in the administration area
+* Changed: Use default WordPress icons instead of own icon pack
+* Changed: Minor design changes
+* Changed: Provide portuguese (Portugal) translation updates via WordPress Updater
+* Performance improvements and code optimizations
+= 1.0.11 =
+* Fixed: Missing page titles with some themes
+* Fixed: Display issues when using apostrophes and backslashes
+* Fixed: Wrong HTML escaping
+* Fixed: Display issues with some themes
+* Added: Portuguese (Portugal) translation (thanks to Sylvie & Bruno)
+= 1.0.10 =
+* Fixed: PHP errors when using a PHP version less than 5.3
+* Fixed: Display issues with big post images in Internet Explorer
+* Added: asgarosforum_after_thread_submit hook
+* Added: asgarosforum_after_post_submit hook
+* Added: asgarosforum_after_edit_submit hook
+* Changed: Minor design changes
+* Changed: Provide russian translation updates via WordPress Updater
+* Performance improvements and code optimizations
 = 1.0.9 =
 * Fixed: Broken thread titles when using multi-byte characters
 * Fixed: Display issues with some themes
@@ -86,9 +179,9 @@ Please contact me in the forums if you want to be a Project Translation Editor (
 * Changed: Editor error messages are now shown on the editor page
 * Changed: Minor design changes
 = 1.0.6 =
-* Added: "Last edited" info to posts
 * Fixed: Wrong word wrap
 * Fixed: Display issues with some themes
+* Added: "Last edited" info to posts
 * Changed: Provide hungarian translation updates via WordPress Updater
 * Changed: Added author_id to asgarosforum_after_post_author action hook
 * Performance improvements and code optimizations

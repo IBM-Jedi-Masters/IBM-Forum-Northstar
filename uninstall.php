@@ -16,12 +16,14 @@ delete_site_option('asgarosforum_db_version');
 // Delete user meta data
 delete_metadata('user', 0, 'asgarosforum_lastvisit', '', true);
 delete_metadata('user', 0, 'asgarosforum_moderator', '', true);
+delete_metadata('user', 0, 'asgarosforum_banned', '', true);
+delete_metadata('user', 0, 'asgarosforum_subscription_topic', '', true);
 
 // Delete terms
-$terms = $wpdb->get_results('SELECT t.term_id FROM '.$wpdb->terms.' AS t INNER JOIN '.$wpdb->term_taxonomy.' AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = "asgarosforum-category";');
+$terms = $wpdb->get_col('SELECT t.term_id FROM '.$wpdb->terms.' AS t INNER JOIN '.$wpdb->term_taxonomy.' AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = "asgarosforum-category";');
 
 foreach ($terms as $term) {
-    wp_delete_term($term->term_id, 'asgarosforum-category');
+    wp_delete_term($term, 'asgarosforum-category');
 }
 
 // Drop custom tables
@@ -46,7 +48,10 @@ function recursiveDelete($str) {
 
 $upload_dir = wp_upload_dir();
 $upload_path = $upload_dir['basedir'].'/asgarosforum/';
-
 recursiveDelete($upload_path);
+
+// Delete themes
+$theme_path = WP_CONTENT_DIR.'/themes-asgarosforum';
+recursiveDelete($theme_path);
 
 ?>
