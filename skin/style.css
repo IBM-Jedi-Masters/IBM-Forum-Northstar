@@ -1,32 +1,18 @@
 /* GENERAL */
-#af-wrapper {
-    font-family: Verdana, Tahoma, sans-serif;
-    font-size: 13px;
-    color: #444;
-    line-height: 1.65;
-    text-shadow: none; /* comp */
-}
 #af-wrapper a {
-    color: #2d89cc;
     border: none;
     text-decoration: none;
     box-shadow: none;
-    font-size: inherit; /* comp */
 }
+.ibm-data-table a:visited{
+        color: #2d89cc;
+    }
+
 #af-wrapper small {
     font-size: smaller;
 }
-#af-wrapper strong,
-#af-wrapper span {
-    font-size: inherit !important; /* comp */
-}
-#af-wrapper div {
-    border-radius: 0; /* comp */
-}
 #af-wrapper .space {
     margin-bottom: 20px !important;
-    visibility: inherit; /* comp */
-    height: inherit; /* comp */
 }
 #af-wrapper .clear {
     clear: both;
@@ -37,58 +23,21 @@
 #af-wrapper .highlight-moderator {
     color: #099922;
 }
-#af-wrapper .banned {
-    color: red;
-    font-style: italic;
-}
 
-/* EDITOR */
-#af-wrapper .editor-row {
-    display: table;
-    width: 100%;
-    line-height: normal;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-}
-#af-wrapper .editor-row input {
-    width: 100%;
-    box-sizing: border-box;
-}
-#af-wrapper .editor-row:last-child {
-    border-bottom: none;
-}
-#af-wrapper .editor-cell {
-    display: table-cell;
-    width: auto;
-    padding: 5px 10px;
-}
-#af-wrapper .editor-cell:first-child {
-    min-width: 180px;
-    width: 180px;
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
-}
-#af-wrapper .editor-cell span {
-    font-weight: bold;
-}
-#af-wrapper .message-editor {
-    padding: 0;
-}
-#af-wrapper .quicktags-toolbar input {
-    width: auto;
-}
 
 /* OVERVIEW/FORUM */
-#af-wrapper .forum [class^="dashicons-"],
-#af-wrapper .forum [class*=" dashicons-"],
-#af-wrapper .thread [class^="dashicons-"],
-#af-wrapper .thread [class*=" dashicons-"] {
-    padding: 0;
+#af-wrapper .forum [class^="icon-"],
+#af-wrapper .forum [class*=" icon-"],
+#af-wrapper .thread [class^="icon-"],
+#af-wrapper .thread [class*=" icon-"] {
+    padding-right: 0;
 }
 #af-wrapper .forum,
 #af-wrapper .thread {
     display: table;
     height: 60px;
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid #cecece;
 }
 #af-wrapper .content-element .forum:last-child,
 #af-wrapper .content-element .thread:last-child {
@@ -97,8 +46,8 @@
 #af-wrapper .forum div,
 #af-wrapper .thread div {
     display: table-cell;
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
-    padding: 5px 10px;
+    border-right: 1px solid #cecece;
+    padding: 0 10px;
     vertical-align: middle;
     box-sizing: content-box;
 }
@@ -108,22 +57,16 @@
 }
 #af-wrapper .forum-status,
 #af-wrapper .thread-status {
-    width: 50px;
     text-align: center;
 }
 #af-wrapper .forum-name,
 #af-wrapper .thread-name {
-    width: auto;
 }
 #af-wrapper .forum-stats,
 #af-wrapper .thread-stats {
-    width: 100px;
-    text-align: center;
 }
 #af-wrapper .forum-poster,
 #af-wrapper .thread-poster {
-    width: 220px;
-    line-height: 1.6;
 }
 #af-wrapper .forum-name strong,
 #af-wrapper .thread-name strong,
@@ -131,34 +74,10 @@
 #af-wrapper .thread small {
     display: block;
 }
-#af-wrapper .forum-subforums {
-    border-top: 1px solid rgba(0, 0, 0, 0.15);
-    padding-top: 5px;
-    margin-top: 5px;
-    word-break: break-word;
-}
 #af-wrapper .bright {
     background-color: #eee;
     padding: 3px 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-/* INPUT ELEMENTS */
-#af-wrapper input {
-    padding: 3px 6px;
-    border: 1px solid #a9a9a9;
-    background-color: #f0f0f0;
-    color: #555;
-    margin: 2px 0 !important;
-    vertical-align: middle;
-    font-family: inherit;
-}
-#af-wrapper input[type="submit"] {
-    color: #fff;
-    background: none;
-    background-color: #2D89CC;
-    border: 1px solid #005B91 !important;
-    text-transform: none;
+    border-bottom: 1px solid #cecece;
 }
 
 /* MENU */
@@ -180,11 +99,12 @@
     text-align: center;
     font-size: 13px;
     font-style: italic;
+    color: #666;
     padding: 8px !important;
 }
 #af-wrapper .info {
     border: 1px solid #ccc;
-    background-color: #ffb;
+    background-color: #ffffbb;
     margin-bottom: 10px;
 }
 #af-wrapper .info span {
@@ -196,7 +116,6 @@
     width: 100%;
     display: block;
     background-color: inherit; /* comp */
-    color: inherit; /* comp */
 }
 
 /* PAGEING */
@@ -205,14 +124,13 @@
 }
 #af-wrapper .pages strong {
     background-color: #737373;
-    color: #fff;
-    font-size: 95% !important;
+    color: #FFFFFF;
+    font-size: 95%;
     padding: 0 5px;
-    font-weight: normal;
 }
 #af-wrapper .pages a {
     background-color: #2D89CC;
-    color: #fff !important;
+    color: #FFFFFF !important;
     font-size: 95%;
     padding: 0 5px;
 }
@@ -234,29 +152,23 @@
 #af-wrapper .breadcrumbs {
     font-size: 12px;
     margin-bottom: 10px;
-    width: 100%;
-    color: #444;
+    color: #636363;
 }
 #af-wrapper .breadcrumbs a {
-    color: #444;
-    background: none; /* comp */
-    padding: inherit; /* comp */
+    color: #636363;
 }
 #af-wrapper .breadcrumbs a:hover {
     color: #2D89CC;
     text-decoration: none;
 }
 #af-wrapper .breadcrumbs .sep {
-    margin: 0 3px;
-    background: none; /* comp */
-    padding: inherit; /* comp */
+    margin: 0 3px 0 3px;
 }
 
 /* CONTENT WRAPPERS*/
 #af-wrapper .content-element {
     border: 1px solid #2d89cc;
     margin-bottom: 10px;
-    background-color: #fff;
 }
 #af-wrapper .content-element a:hover {
     text-decoration: underline;
@@ -276,20 +188,20 @@
     border-radius: inherit; /* comp */
 }
 #af-wrapper .post-header {
-    background-color: rgba(0, 0, 0, 0.03);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-    border-top: 2px solid rgba(0, 0, 0, 0.2);
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+    border-top: 2px solid #ccc;
     box-sizing: content-box;
     height: 29px; /* comp */
 }
 #af-wrapper .post-date {
     float: left;
+    font-size: 11px;
     font-style: italic;
-    padding: 4px 10px;
+    padding: 5px 10px;
 }
 #af-wrapper .post-date a {
     color: #777;
-    font-size: 11px;
 }
 #af-wrapper .post-menu {
     float: right;
@@ -298,33 +210,24 @@
 }
 #af-wrapper .post-menu a {
     display: table-cell;
-    border-left: 1px solid rgba(0, 0, 0, 0.15);
+    border-left: 1px solid #ddd;
     padding: 4px 6px;
 }
 #af-wrapper .post-menu a:hover {
-    color: #005C92;
     text-decoration: none;
 }
 #af-wrapper .post-content {
     display: table;
     width: 100%;
     margin: 0; /* comp */
-    padding: 0; /* comp */
-    table-layout: fixed; /* IE */
-}
-#af-wrapper .post-content:before,
-#af-wrapper .post-content:after {
-    content: none; /* comp */
 }
 #af-wrapper .post-author {
     display: table-cell;
     text-align: center;
     vertical-align: top;
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
-    width: 125px;
+    border-right: 1px solid #dedede;
     padding: 7px;
-    background-color: rgba(0, 0, 0, 0.05);
-    word-wrap: break-word;
+    background-color: #f3f3f3;
 }
 #af-wrapper .post-message {
     display: table-cell;
@@ -362,9 +265,9 @@
     font-size: inherit;
     padding: 10px;
     margin: 10px 0;
-    background: rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-left: 4px solid rgba(0, 0, 0, 0.3);
+    background: #eee;
+    border: 1px solid #adadad;
+    border-left: 4px solid #adadad;
     outline: none; /* comp */
     color: inherit; /* comp */
 }
@@ -376,46 +279,100 @@
     font-weight: bold;
 }
 
-/* SUBSCRIPTIONS */
-#af-wrapper #topic-subscription {
-    display: block;
+/*------------------------------------------------*/
+/*-------------------[icomoon]--------------------*/
+/*------------(http://icomoon.io)-----------------*/
+/*------------------------------------------------*/
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot?13z6re');
+	src:url('fonts/icomoon.eot?13z6re#iefix') format('embedded-opentype'),
+		url('fonts/icomoon.ttf?13z6re') format('truetype'),
+		url('fonts/icomoon.woff?13z6re') format('woff'),
+		url('fonts/icomoon.svg?13z6re#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
-#af-wrapper #topic-subscription a {
-    font-size: 11px;
-    font-style: italic;
-}
-
-/* ICONS */
-#af-wrapper [class^="dashicons-"],
-#af-wrapper [class*=" dashicons-"] {
+#af-wrapper [class^="icon-"],
+#af-wrapper [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'icomoon' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
     padding-right: 5px;
+    font-size: 1.2em;
+    vertical-align: text-top;
     border-radius: inherit; /* comp */
     background: none; /* comp */
     color: inherit; /* comp */
-    display: inline; /* comp */
-    position: initial; /* comp */
 }
-#af-wrapper .dashicons-overview:before,
-#af-wrapper .dashicons-admin-page-small:before {
-	content: "\f214";
+#af-wrapper [class^="icon-"]:before,
+#af-wrapper [class*=" icon-"]:before {
+    font-family: inherit !important;
 }
-#af-wrapper .dashicons-normal_open:before,
-#af-wrapper .dashicons-sticky_open:before {
-    content: "\f206";
+#af-wrapper .icon-home:before {
+	content: "\e900";
 }
-#af-wrapper .dashicons-normal_closed:before,
-#af-wrapper .dashicons-sticky_closed:before {
-    content: "\f160";
+#af-wrapper .icon-file-empty:before {
+	content: "\e901";
 }
-#af-wrapper .dashicons-overview:before,
-#af-wrapper .dashicons-normal_open:before,
-#af-wrapper .dashicons-sticky_open:before,
-#af-wrapper .dashicons-normal_closed:before,
-#af-wrapper .dashicons-sticky_closed:before {
-    font-size: 40px;
-    width: 40px;
-    height: 40px;
+#af-wrapper .icon-pushpin:before {
+	content: "\e902";
+}
+#af-wrapper .icon-bubble2:before {
+	content: "\e903";
+}
+#af-wrapper .icon-lock:before {
+	content: "\e905";
+}
+#af-wrapper .icon-unlocked:before {
+	content: "\e906";
+}
+#af-wrapper .icon-checkmark:before {
+	content: "\e908";
+}
+#af-wrapper .icon-shuffle:before {
+	content: "\e909";
+}
+#af-wrapper .icon-pencil2:before {
+    content: "\e90b";
+}
+#af-wrapper .icon-quotes-left:before {
+    content: "\e90c";
+}
+#af-wrapper .icon-bin:before {
+    content: "\e90d";
+}
+#af-wrapper .icon-files-empty-small:before {
+	content: "\e90f";
+}
+#af-wrapper .icon-overview:before {
+    content: "\e90f";
+    font-size: 2em;
+}
+#af-wrapper .icon-normal_open:before,
+#af-wrapper .icon-sticky_open:before {
+    content: "\e901";
+    font-size: 2em;
+}
+#af-wrapper .icon-normal_closed:before,
+#af-wrapper .icon-sticky_closed:before {
+    content: "\e905";
+    font-size: 2em;
+    padding-left: 15px;
 }
 #af-wrapper .unread:before {
     color: #2D89CC;
+}
+
+.wp-editor-area {
+    color: #000 !important;
+    font-family: "HelvRegularIBM", "Helvetica Neue", Arial, sans-serif !important; 
 }

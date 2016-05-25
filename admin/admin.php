@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) exit;
 class asgarosforum_admin {
     var $saved = false;
 
-	function __construct() {
+    function __construct() {
         add_action('admin_menu', array($this, 'add_admin_pages'));
         add_action('admin_init', array($this, 'save_settings'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
@@ -13,24 +13,21 @@ class asgarosforum_admin {
         // Taxonomy stuff
         add_action('init', 'asgarosforum::register_category_taxonomy');
         add_filter('parent_file', array($this, 'set_current_menu'));
-        add_filter('submenu_file', array($this, 'set_current_submenu'));
         add_filter('manage_edit-asgarosforum-category_columns', array($this, 'manage_columns'));
         add_action('manage_asgarosforum-category_custom_column', array($this, 'manage_custom_columns'), 10, 3);
-        add_filter('manage_edit-asgarosforum-category_sortable_columns', array($this, 'manage_sortable_columns'));
         add_action('asgarosforum-category_add_form_fields', array($this, 'add_category_form_fields'));
 		add_action('asgarosforum-category_edit_form_fields', array($this, 'edit_category_form_fields'));
         add_action('create_asgarosforum-category', array($this, 'save_category_form_fields'));
         add_action('edit_asgarosforum-category', array($this, 'save_category_form_fields'));
         add_action('delete_asgarosforum-category', array($this, 'delete_category'), 10, 3);
-        add_action('get_terms', array($this, 'get_ordered_terms'));
 
-        // Moderator and Banning
-        add_action('edit_user_profile', array($this, 'user_profile_fields'));
-        add_action('edit_user_profile_update', array($this, 'user_profile_fields_update'));
+        // Moderator stuff
+        add_action('edit_user_profile', array($this, 'moderator_profile_fields'));
+        add_action('edit_user_profile_update', array($this, 'moderator_profile_fields_update'));
     }
 
-    function user_profile_fields($user) {
-        if (!current_user_can('manage_options') || user_can($user->ID, 'manage_options')) {
+    function moderator_profile_fields($user) {
+        if (!current_user_can('manage_options')) {
             return false;
         }
 
@@ -38,33 +35,23 @@ class asgarosforum_admin {
         echo '<table class="form-table">';
         echo '<tr>';
         echo '<th><label for="asgarosforum_moderator">'.__('Forum Moderator', 'asgaros-forum').'</label></th>';
-        echo '<td><input type="checkbox" name="asgarosforum_moderator" id="asgarosforum_moderator" value="1" '.checked(get_the_author_meta('asgarosforum_moderator', $user->ID), '1', false).'></td>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<th><label for="asgarosforum_banned">'.__('Banned User', 'asgaros-forum').'</label></th>';
-        echo '<td><input type="checkbox" name="asgarosforum_banned" id="asgarosforum_banned" value="1" '.checked(get_the_author_meta('asgarosforum_banned', $user->ID), '1', false).'></td>';
-        echo '</tr>';
-        echo '</table>';
+        echo '<td>';
+        echo '<input type="checkbox" name="asgarosforum_moderator" id="asgarosforum_moderator" value="1" '.checked(get_the_author_meta('asgarosforum_moderator', $user->ID ), '1', false).' />';
+        echo '</td></tr></table>';
     }
 
-    function user_profile_fields_update($user_id) {
-        if (!current_user_can('manage_options') || user_can($user->ID, 'manage_options')) {
+    function moderator_profile_fields_update($user_id) {
+        if (!current_user_can('manage_options')) {
             return false;
         }
 
         update_usermeta(absint($user_id), 'asgarosforum_moderator', wp_kses_post($_POST['asgarosforum_moderator']));
-        update_usermeta(absint($user_id), 'asgarosforum_banned', wp_kses_post($_POST['asgarosforum_banned']));
     }
 
     function set_current_menu($parent_file) {
         global $submenu_file;
-        $parent_file = ($submenu_file == 'edit-tags.php?taxonomy=asgarosforum-category') ? 'asgarosforum-options' : $parent_file;
+        $parent_file = ($submenu_file == 'edit-tags.php?taxonomy=asgarosforum-category') ? 'asgarosforum' : $parent_file;
         return $parent_file;
-    }
-
-    function set_current_submenu($submenu_file) {
-        $submenu_file = ($submenu_file == 'edit-tags.php?taxonomy=asgarosforum-category') ? 'edit-tags.php?taxonomy=asgarosforum-category&orderby=order&order=asc' : $submenu_file;
-        return $submenu_file;
     }
 
     function manage_columns($columns) {
@@ -99,15 +86,10 @@ class asgarosforum_admin {
         return $out;
     }
 
-    function manage_sortable_columns($sortable) {
-        $sortable['order'] = 'order';
-        return $sortable;
-    }
-
     function add_category_form_fields() {
         echo '<div class="form-field form-required term-order-wrap">';
             echo '<label>'.__('Order', 'asgaros-forum').'</label>';
-            echo '<input type="number" name="category_order" value="1" size="3">';
+            echo '<input type="number" name="category_order" value="1" size="3" />';
         echo '</div>';
 
         echo '<div class="form-field form-required term-category_access-wrap">';
@@ -131,7 +113,7 @@ class asgarosforum_admin {
         echo '<tr class="form-field form-required term-order-wrap">';
             echo '<th scope="row">'.__('Order', 'asgaros-forum').'</th>';
             echo '<td>';
-                echo '<input type="text" name="category_order" value="'.$order.'">';
+                echo '<input type="text" name="category_order" value="'.$order.'" />';
             echo '</td>';
         echo '</tr>';
 
@@ -162,93 +144,32 @@ class asgarosforum_admin {
         do_action('asgarosforum_action_save_category_form_fields', $term_id);
     }
 
-    function get_ordered_terms($categories) {
-        global $submenu_file, $asgarosforum;
-
-        if ($submenu_file === 'edit-tags.php?taxonomy=asgarosforum-category&orderby=order&order=asc') {
-            if (!empty($_GET['orderby']) && $_GET['orderby'] === 'order') {
-                foreach ($categories as $key => $category) {
-                    $category->order = get_term_meta($category->term_id, 'order', true);
-                }
-
-                usort($categories, array($asgarosforum, 'categories_compare'));
-
-                if (!empty($_GET['order']) && $_GET['order'] === 'desc') {
-                    $categories = array_reverse($categories);
-                }
-            }
-        }
-
-        return $categories;
-    }
-
     function add_admin_pages() {
-        add_menu_page(__('Forum', 'asgaros-forum'), __('Forum', 'asgaros-forum'), 'manage_options', 'asgarosforum-options', array($this, 'options_page'), 'dashicons-clipboard');
-        add_submenu_page('asgarosforum-options', __('Options', 'asgaros-forum'), __('Options', 'asgaros-forum'), 'manage_options', 'asgarosforum-options', array($this, 'options_page'));
-        add_submenu_page('asgarosforum-options', __('Categories', 'asgaros-forum'), __('Categories', 'asgaros-forum'), 'manage_options', 'edit-tags.php?taxonomy=asgarosforum-category&orderby=order&order=asc', null);
-        add_submenu_page('asgarosforum-options', __('Forums', 'asgaros-forum'), __('Forums', 'asgaros-forum'), 'manage_options', 'asgarosforum-structure', array($this, 'forums_page'));
+        $category_taxonomy = get_taxonomy('asgarosforum-category');
+
+        add_menu_page(__('Forum', 'asgaros-forum'), __('Forum', 'asgaros-forum'), 'administrator', 'asgarosforum', array($this, 'forums-page'), 'dashicons-clipboard');
+        add_submenu_page('asgarosforum', __('Categories', 'asgaros-forum'), __('Categories', 'asgaros-forum'), 'administrator', 'edit-tags.php?taxonomy='.$category_taxonomy->name, null);
+        add_submenu_page('asgarosforum', __('Forums', 'asgaros-forum'), __('Forums', 'asgaros-forum'), 'administrator', 'asgarosforum-structure', array($this, 'forums_page'));
     }
 
     function enqueue_admin_scripts($hook) {
         global $submenu_file, $asgarosforum;
+        $l10n_vars = array('remove_forum_warning' => __('WARNING: Deleting this Forum will also PERMANENTLY DELETE ALL Threads, and Replies associated with it!!! Are you sure you want to delete this Forum???', 'asgaros-forum'));
 
         if (strstr($hook, 'asgarosforum') !== false || $submenu_file == 'edit-tags.php?taxonomy=asgarosforum-category') {
             wp_enqueue_style('asgarosforum-admin-css', $asgarosforum->directory.'admin/admin.css');
             wp_enqueue_style('wp-color-picker');
             wp_enqueue_script('asgarosforum-admin-js', $asgarosforum->directory.'admin/admin.js', array('wp-color-picker'), false, true);
+            wp_localize_script('asgarosforum-admin-js', 'asgarosforum_admin', $l10n_vars);
         }
     }
 
     function save_settings() {
         if (isset($_POST['af_options_submit'])) {
             $this->save_options();
-        } else if (isset($_POST['af-create-edit-forum-submit'])) {
-            $this->save_forum();
-        } else if (isset($_POST['asgaros-forum-delete-forum'])) {
-            if (!empty($_POST['forum-id']) && is_numeric($_POST['forum-id']) && !empty($_POST['forum-category']) && is_numeric($_POST['forum-category'])) {
-                $this->delete_forum($_POST['forum-id'], $_POST['forum-category']);
-            }
+        } else if (isset($_POST['af_forums_submit'])) {
+            $this->save_forums();
         }
-    }
-
-    /* OPTIONS */
-    function options_page() {
-        global $asgarosforum;
-        require('views/options.php');
-    }
-
-    function save_options() {
-        global $asgarosforum;
-        $saved_ops = array();
-
-        foreach ($asgarosforum->options_default as $k => $v) {
-            if (isset($_POST[$k]) && !empty($_POST[$k])) {
-                if (is_numeric($v)) {
-                    $saved_ops[$k] = ((int)$_POST[$k] > 0) ? (int)$_POST[$k] : $v;
-                } else if (is_bool($v)) {
-                    $saved_ops[$k] = true;
-                } else if ($k === 'theme') {
-                    $saved_ops[$k] = esc_sql(stripslashes($_POST[$k]));
-                } else {
-                    $saved_ops[$k] = esc_sql(stripslashes(strtolower($_POST[$k])));
-                }
-            } else {
-                if (is_numeric($v)) {
-                    $saved_ops[$k] = $v;
-                } else if (is_bool($v)) {
-                    $saved_ops[$k] = false;
-                } else {
-                    $saved_ops[$k] = $v;
-                }
-            }
-
-
-        }
-
-        update_option('asgarosforum_options', $saved_ops);
-        $asgarosforum->options = get_option('asgarosforum_options', array());
-        AsgarosForumThemeManager::set_current_theme($asgarosforum->options['theme']);
-        $this->saved = true;
     }
 
     /* STRUCTURE */
@@ -259,35 +180,56 @@ class asgarosforum_admin {
         require('views/forums.php');
     }
 
-    function save_forum() {
+    function save_forums() {
         global $asgarosforum, $wpdb;
-        $forum_id           = $_POST['forum_id'];
-        $forum_category     = $_POST['forum_category'];
-        $forum_parent_forum = $_POST['forum_parent_forum'];
-        $forum_name         = trim($_POST['forum_name']);
-        $forum_description  = trim($_POST['forum_description']);
-        $forum_closed       = (isset($_POST['forum_closed'])) ? 1 : 0;
-        $forum_order        = (is_numeric($_POST['forum_order'])) ? $_POST['forum_order'] : 0;
+        $order = 1;
+        $listed_forums = array();
+        $forums = array();
+        $categories = $asgarosforum->get_categories(true);
 
-        if (!empty($forum_name)) {
-            if ($forum_id === 'new') {
-                $wpdb->insert(
-                    $asgarosforum->table_forums,
-                    array('name' => $forum_name, 'parent_id' => $forum_category, 'parent_forum' => $forum_parent_forum, 'description' => $forum_description, 'sort' => $forum_order, 'closed' => $forum_closed),
-                    array('%s', '%d', '%d', '%s', '%d', '%d')
-                );
-            } else {
-                $wpdb->update(
-                    $asgarosforum->table_forums,
-                    array('name' => $forum_name, 'description' => $forum_description, 'sort' => $forum_order, 'closed' => $forum_closed),
-                    array('id' => $forum_id),
-                    array('%s', '%s', '%d', '%d'),
-                    array('%d')
-                );
+        foreach ($categories as $category) {
+            if (isset($_POST['forum_id'][$category->term_id]) && !empty($_POST['forum_id'][$category->term_id])) {
+                foreach ($_POST['forum_id'][$category->term_id] as $key => $forum_id) {
+                    $name = trim(stripslashes($_POST['forum_name'][$category->term_id][$key]));
+                    $description = trim(stripslashes($_POST['forum_description'][$category->term_id][$key]));
+
+                    if (empty($name)) {
+                        if ($forum_id != 'new') {
+                            $listed_forums[] = $forum_id;
+                        }
+
+                        continue;
+                    }
+
+                    if ($forum_id == 'new') {
+                        $wpdb->insert($asgarosforum->table_forums, array('name' => $name, 'description' => $description, 'sort' => $order, 'parent_id' => $category->term_id), array('%s', '%s', '%d', '%d'));
+                        $listed_forums[] = $wpdb->insert_id;
+                    } else {
+                        $query = "UPDATE {$asgarosforum->table_forums} SET name = %s, description = %s, sort = %d, parent_id = %d WHERE id = %d;";
+                        $wpdb->query($wpdb->prepare($query, $name, $description, $order, $category->term_id, $forum_id));
+                        $listed_forums[] = $forum_id;
+                    }
+
+                    $order++;
+                }
             }
-
-            $this->saved = true;
         }
+
+        $listed_forums = implode(',', $listed_forums);
+
+        if (empty($listed_forums)) {
+            $forums = $wpdb->get_col("SELECT id FROM {$asgarosforum->table_forums};");
+        } else {
+            $forums = $wpdb->get_col("SELECT id FROM {$asgarosforum->table_forums} WHERE id NOT IN ({$listed_forums});");
+        }
+
+        if (!empty($forums)) {
+            foreach ($forums as $forum) {
+                $this->delete_forum($forum);
+            }
+        }
+
+        $this->saved = true;
     }
 
     function delete_category($term_id, $term_taxonomy_id, $deleted_term) {
@@ -297,24 +239,14 @@ class asgarosforum_admin {
 
         if (!empty($forums)) {
             foreach ($forums as $forum) {
-                $this->delete_forum($forum, $term_id);
+                $this->delete_forum($forum);
             }
         }
     }
 
-    function delete_forum($forum_id, $category_id) {
+    function delete_forum($forum_id) {
         global $wpdb, $asgarosforum;
 
-        // Delete all subforums first
-        $subforums = $asgarosforum->get_forums($category_id, $forum_id);
-
-        if (count($subforums) > 0) {
-            foreach ($subforums as $subforum) {
-                $this->delete_forum($subforum->id, $category_id);
-            }
-        }
-
-        // Delete all threads
         $threads = $wpdb->get_col("SELECT id FROM {$asgarosforum->table_threads} WHERE parent_id = {$forum_id};");
 
         if (!empty($threads)) {
@@ -322,11 +254,8 @@ class asgarosforum_admin {
                 $asgarosforum->delete_thread($thread, true);
             }
         }
-        // Last but not least delete the forum
-        $wpdb->delete($asgarosforum->table_forums, array('id' => $forum_id), array('%d'));
 
-        $this->saved = true;
+        $wpdb->query("DELETE FROM {$asgarosforum->table_forums} WHERE id = {$forum_id};");
     }
 }
-
 ?>

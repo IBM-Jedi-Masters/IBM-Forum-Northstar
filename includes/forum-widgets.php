@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) exit;
 
 class AsgarosForumRecentPosts_Widget extends WP_Widget {
     public function __construct() {
-        $widget_ops = array('classname' => 'asgarosforumrecentposts_widget', 'description' => __('Shows recent posts in Asgaros Forum.', 'asgaros-forum'));
+        $widget_ops = array('classname' => 'asgarosforumrecentposts_widget ibm-padding-top-1', 'description' => __('Shows recent posts in Asgaros Forum.', 'asgaros-forum'));
 		parent::__construct('asgarosforumrecentposts_widget', __('Asgaros Forum: Recent Posts', 'asgaros-forum'), $widget_ops);
     }
 
@@ -30,7 +30,7 @@ class AsgarosForumRecentPosts_Widget extends WP_Widget {
         $categories_list = array();
         $where = '';
 
-        if (!AsgarosForumPermissions::isModerator('current')) {
+        if (!$asgarosforum->is_moderator()) {
             $categories = $asgarosforum->get_all_categories_by_meta('category_access', 'moderator');
             $categories_list = array_merge($categories_list, $categories);
         }
@@ -54,11 +54,11 @@ class AsgarosForumRecentPosts_Widget extends WP_Widget {
                 echo $args['before_title'].$title.$args['after_title'];
             }
 
-            echo '<ul class="asgarosforum-widget">';
+            echo '<ul class="asgarosforum-widget ibm-link-list">';
             foreach ($posts as $post) {
                 echo '<li>';
-                echo '<span class="post-link"><a href="'.$asgarosforum->get_widget_link($post->parent_id, $post->id, get_the_permalink($target)).'" title="'.esc_html(stripslashes($post->name)).'">'.esc_html($asgarosforum->cut_string(stripslashes($post->name))).'</a></span>';
-                echo '<span class="post-author">'.__('by', 'asgaros-forum').'&nbsp;<b>'.$asgarosforum->get_username($post->author_id, true).'</b></span>';
+                echo '<span class="post-link"><a class="ibm-forward-link" href="'.$asgarosforum->get_widget_link($post->parent_id, $post->id, get_the_permalink($target)).'">'.$asgarosforum->cut_string($post->name).'</a></span>';
+                echo '<span class="post-author">'.__('by', 'asgaros-forum').'&nbsp;<b>'.$asgarosforum->get_username($post->author_id, false, true).'</b></span>';
 				echo '<span class="post-date">'.sprintf(__('%s ago', 'asgaros-forum'), human_time_diff(strtotime($post->date), current_time('timestamp'))).'</span>';
 			    echo '</li>';
             }
@@ -101,14 +101,12 @@ class AsgarosForumRecentPosts_Widget extends WP_Widget {
 	}
 }
 
-function init_asgarosforum_recentposts_widget() {
+add_action('widgets_init', function() {
     global $asgarosforum;
 
     if (!$asgarosforum->options['require_login'] || is_user_logged_in()) {
         register_widget('AsgarosForumRecentPosts_Widget');
     }
-}
-
-add_action('widgets_init', 'init_asgarosforum_recentposts_widget');
+});
 
 ?>
